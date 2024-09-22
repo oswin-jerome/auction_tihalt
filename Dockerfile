@@ -1,3 +1,10 @@
+FROM node:18-alpine AS builder
+WORKDIR /var/www
+COPY . .
+RUN npm i
+RUN npm run build
+
+
 # Use the official PHP image as the base
 FROM php:8.2-fpm
 
@@ -33,6 +40,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Change current user to www
 RUN chown -R www-data:www-data ./public/*
 RUN chmod -R 777 ./public/*
+COPY --from=builder  /var/www/public/build /var/www/public/build
 USER www-data
 
 # Expose port 9000 and start php-fpm server
