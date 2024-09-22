@@ -1,129 +1,115 @@
-import { useState, PropsWithChildren, ReactNode } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage } from "@inertiajs/react";
+import { PropsWithChildren, ReactNode, useState } from "react";
 
-export default function Authenticated({ header, children }: PropsWithChildren<{ header?: ReactNode }>) {
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import {
+    FileText,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    Search,
+    X,
+} from "lucide-react";
+
+const sidebarItems = [
+    { icon: LayoutDashboard, label: "Dashboard", href: route("dashboard") },
+    { icon: FileText, label: "Auctions", href: route("admin.auction.index") },
+    { icon: FileText, label: "bids", href: route("admin.bids.index") },
+    { icon: FileText, label: "logs", href: route("admin.logs.index") },
+];
+
+export default function Authenticated({
+    header,
+    children,
+}: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
-
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] =
+        useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="bg-white border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16">
-                        <div className="flex">
-                            <div className="shrink-0 flex items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
-                            >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+        <div className="flex h-screen bg-gray-100">
+            {/* Sidebar */}
+            <div
+                className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform 
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        lg:translate-x-0 lg:static lg:inset-0 transition duration-300 ease-in-out
+      `}
+            >
+                <div className="flex items-center justify-between h-16 px-6 bg-primary text-white">
+                    <span className="text-2xl font-semibold">Auction</span>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="lg:hidden"
+                        onClick={() => setSidebarOpen(false)}
+                    >
+                        <X className="h-6 w-6" />
+                    </Button>
                 </div>
+                <nav className="mt-6">
+                    {sidebarItems.map((item, index) => (
+                        <Link
+                            key={index}
+                            href={item.href}
+                            className={`
+                flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100
+               
+              `}
+                        >
+                            <item.icon className="h-5 w-5 mr-3" />
+                            {item.label}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
 
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
-                    <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="pt-4 pb-1 border-t border-gray-200">
-                        <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+                {/* Top Bar */}
+                <header className="flex items-center justify-between h-16 px-6 bg-white border-b">
+                    <div className="flex items-center">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="lg:hidden mr-2"
+                            onClick={() => setSidebarOpen(true)}
+                        >
+                            <Menu className="h-6 w-6" />
+                        </Button>
+                        <div className="relative">
+                            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <Input
+                                type="search"
+                                placeholder="Search..."
+                                className="pl-8 w-64"
+                            />
                         </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
-                            <ResponsiveNavLink method="post" href={route('logout')} as="button">
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
                     </div>
-                </div>
-            </nav>
-
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
+                    <div className="flex items-center space-x-4">
+                        <Link href={route("logout")} method="post">
+                            <LogOut className="h-5 w-5" />
+                        </Link>
+                        <Avatar>
+                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                    </div>
                 </header>
-            )}
 
-            <main>{children}</main>
+                {/* Main Content Area */}
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                    {children}
+                </main>
+
+                {/* Footer */}
+                <footer className="bg-white border-t py-4 px-6 text-center text-sm text-gray-600">
+                    <p>© 2023 Auction. Developed by Tihalt</p>
+                </footer>
+            </div>
         </div>
     );
 }
