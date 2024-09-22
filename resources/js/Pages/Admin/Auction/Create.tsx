@@ -1,5 +1,5 @@
-import InputError from "@/Components/InputError";
-import { Button } from "@/Components/ui/button";
+import InputError from "@/components/InputError";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -7,10 +7,10 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import { Textarea } from "@/Components/ui/textarea";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 import { FormEvent } from "react";

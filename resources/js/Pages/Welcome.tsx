@@ -1,12 +1,12 @@
-import { Button } from "@/Components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import UserLayout from "@/Layouts/UserLayout";
 import { Auction, PageProps } from "@/types";
 import { Search } from "lucide-react";

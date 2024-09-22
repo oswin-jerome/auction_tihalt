@@ -1,11 +1,11 @@
-import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/Components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
-} from "@/Components/ui/card";
+} from "@/components/ui/card";
 import UserLayout from "@/Layouts/UserLayout";
 import { Auction } from "@/types";
 import { Link } from "@inertiajs/react";
