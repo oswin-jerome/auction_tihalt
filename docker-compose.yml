@@ -59,7 +59,7 @@ services:
         working_dir: /var/www
         volumes:
             - auction_app_appfiles:/var/www
-        command: sh -c "npm install && npm run build"
+        command: sh -c "rm -R node_modules && npm install && npm run build"
         networks:
             - auction_app
 
